@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAX FITNESS GYMS | Ranchi's Elite Training Ground</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@200;300;400;600&family=Bebas+Neue&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #FF6A00;
+            --secondary: #FF8C00;
+            --bg: #0A0A0A;
+            --surface: #141414;
+            --surface-light: #181818;
+            --text: #F0EDE8;
+            --text-muted: #888888;
+            --font-heading: 'Bebas Neue', sans-serif;
+            --font-body: 'Barlow', sans-serif;
+            --font-label: 'Rajdhani', sans-serif;
+            --transition: 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Noise Texture Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 3px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            outline: none;
+            font-family: var(--font-label);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        /* Animations */
+        .anim-hidden {
+            opacity: 0;
+            transform: translateY(40px) translateZ(0);
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+
+        .anim-visible {
+            opacity: 1;
+            transform: translateY(0) translateZ(0);
+            transition: opacity var(--transition), transform var(--transition);
+        }
+
+        @keyframes heroFadeUp {
+            from { opacity: 0; transform: translateY(30px) translateZ(0); }
+            to   { opacity: 1; transform: translateY(0) translateZ(0); }
+        }
+
+        @keyframes orangePulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,106,0,0.3), 0 0 40px rgba(255,106,0,0.15); }
+            50%       { box-shadow: 0 0 30px rgba(255,106,0,0.5), 0 0 60px rgba(255,106,0,0.25); }
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes scrollIndicator {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(10px); opacity: 0; }
+        }
+
+        /* Layout Helpers */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-padding {
+            padding: 100px 0;
+        }
+
+        .orange-text {
+            color: var(--primary);
+        }
+
+        .outline-text {
+            -webkit-text-stroke: 1px var(--text);
+            color: transparent;
+        }
+
+        /* 1. Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4rem;
+            transition: all 0.4s ease;
+            transform: translateZ(0);
+            background: rgba(10, 10, 10, 0.4); /* Subtle initial background */
+        }
+
+        nav.scrolled {
+            height: 70px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 106, 0, 0.2);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-badge {
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 24px;
+            color: var(--bg);
+            border-radius: 4px;
+            animation: orangePulse 3s ease-in-out infinite;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-brand {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            line-height: 1;
+            color: var(--text);
+        }
+
+        .logo-tagline {
+            font-family: var(--font-label);
+            font-size: 10px;
+            color: var(--primary);
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-family: var(--font-label);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: var(--primary);
+            color: var(--bg);
+            padding: 10px 24px;
+            border-radius: 2px;
+            font-size: 14px;
+            animation: orangePulse 3s ease-in-out infinite;
+        }
+
+        .nav-cta:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* 2. Hero Section */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(circle at 75% 50%, rgba(255, 106, 0, 0.15) 0%, transparent 50%);
+            overflow: hidden;
+            padding-top: 90px; /* Account for fixed header */
+        }
+
+        #hero::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 106, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 106, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            width: 60%;
+            z-index: 2;
+            margin-top: 20px; /* Extra breathing room */
+        }
+
+        .hero-badge {
+            display: inline-block;
+            font-family: var(--font-label);
+            color: var(--primary);
+            font-size: 14px;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            animation: heroFadeUp 0.8s 0.00s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .hero-title {
+            font-size: clamp(80px, 10vw, 140px);
+            line-height: 0.9;
+            margin-bottom: 10px;
+            animation: heroFadeUp 0.8s 0.15s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .hero-subline {
+            font-size: clamp(30px, 4vw, 50px);
+            margin-bottom: 30px;
+            animation: heroFadeUp 0.8s 0.25s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .hero-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin-bottom: 40px;
+            font-weight: 300;
+            animation: heroFadeUp 0.8s 0.35s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            animation: heroFadeUp 0.8s 0.45s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--bg);
+            padding: 16px 40px;
+            font-size: 16px;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--primary);
+            padding: 16px 40px;
+            font-size: 16px;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 106, 0, 0.1);
+        }
+
+        .hero-stats {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+            animation: heroFadeUp 0.8s 0.60s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .stat-item {
+            text-align: right;
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: 70px;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-family: var(--font-label);
+            font-size: 14px;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-family: var(--font-label);
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .scroll-dot {
+            width: 2px;
+            height: 15px;
+            background: var(--primary);
+            animation: scrollIndicator 1.5s infinite;
+        }
+
+        /* 3. Ticker Bar */
+        .ticker-bar {
+          margin-top: 20px;
+            background: var(--primary);
+            padding: 32px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            z-index: 10;
+            border-top: 5px solid rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker-content {
+            display: inline-block;
+            animation: marquee 30s linear infinite;
+        }
+
+        .ticker-text {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            color: var(--bg);
+            padding-right: 50px;
+        }
+
+        /* 4. Benefits Section */
+        #benefits {
+            background: var(--bg);
+        }
+
+        .section-label {
+            text-align: center;
+            font-family: var(--font-label);
+            color: var(--primary);
+            font-size: 14px;
+            letter-spacing: 4px;
+            margin-bottom: 60px;
+            display: block;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            contain: layout;
+        }
+
+        .benefit-card {
+            background: var(--surface);
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            background: var(--surface-light);
+        }
+
+        .benefit-card::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: width 0.4s ease;
+        }
+
+        .benefit-card:hover::after {
+            width: 100%;
+        }
+
+        .benefit-icon {
+            font-size: 40px;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .benefit-ghost {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: var(--font-heading);
+            font-size: 80px;
+            color: rgba(255, 255, 255, 0.03);
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .benefit-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .benefit-desc {
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: 300;
+        }
+
+        /* 5. Programs Carousel */
+        #programs {
+            background: var(--bg);
+            position: relative;
+        }
+
+        .carousel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 50px;
+        }
+
+        .carousel-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border: 1px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .control-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            overflow: hidden;
+            contain: layout;
+            /* Reserve space so arrows don't overlap cards */
+            padding: 0 72px;
+        }
+
+        /* Overlay carousel controls (left/right edges) */
+        .carousel-controls.carousel-controls-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 18px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .carousel-controls.carousel-controls-overlay .control-btn {
+            pointer-events: auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            background: rgba(10,10,10,0.65);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 22px rgba(255,106,0,0.2);
+            transform: translateZ(0);
+        }
+
+        .carousel-controls.carousel-controls-overlay .control-btn.is-hidden {
+            opacity: 0;
+            transform: scale(0.92) translateZ(0);
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-controls.carousel-controls-overlay {
+                padding: 0 12px;
+            }
+            .carousel-wrapper {
+                padding: 0 56px;
+            }
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 25px;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .program-card {
+            min-width: 320px;
+            background: linear-gradient(135deg, var(--surface) 0%, #0a0a0a 100%);
+            padding: 40px;
+            border-top: 2px solid var(--primary);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .program-card.active {
+            box-shadow: 0 0 30px rgba(255, 106, 0, 0.15);
+            border: 1px solid var(--primary);
+            border-top: 4px solid var(--primary);
+        }
+
+        .program-name {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .program-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .program-duration {
+            font-family: var(--font-label);
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .program-badge {
+            font-family: var(--font-label);
+            font-size: 10px;
+            padding: 4px 10px;
+            border: 1px solid rgba(255, 106, 0, 0.3);
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        /* 6. Trainers Section */
+        #trainers {
+            background: var(--bg);
+        }
+
+        .trainers-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .trainer-card {
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 30px;
+        }
+
+        .trainer-accent {
+            height: 80px;
+            background: linear-gradient(to bottom, var(--primary), transparent);
+            opacity: 0.3;
+        }
+
+        .trainer-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--surface-light);
+            margin: -75px auto 20px;
+            border: 4px solid var(--bg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .trainer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: filter 0.4s ease;
+        }
+
+        .trainer-card:hover .trainer-avatar img {
+            filter: grayscale(0%);
+        }
+
+        .trainer-name {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .trainer-specialty {
+            font-family: var(--font-label);
+            font-size: 12px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .trainer-exp {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .trainer-social {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s ease;
+        }
+
+        .trainer-card:hover .trainer-social {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .trainer-social a {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        /* 7. Reviews Section */
+        #reviews {
+            background: var(--surface);
+        }
+
+        .reviews-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 106, 0, 0.1);
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-family: var(--font-label);
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .reviews-carousel {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .reviews-track {
+            display: flex;
+            transition: transform 0.6s ease;
+        }
+
+        .review-card {
+            min-width: 100%;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .review-text {
+            font-size: 20px;
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 30px;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .review-author {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .review-stars {
+            color: #FFD700;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .review-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 106, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.5);
+        }
+
+        /* 8. Maps Section */
+        #location {
+            background: var(--bg);
+        }
+
+        .location-container {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .map-wrapper {
+            position: relative;
+            height: 420px;
+            border: 1px solid rgba(255, 106, 0, 0.3);
+        }
+
+        .map-wrapper iframe {
+            filter: grayscale(100%) invert(90%) contrast(90%) sepia(20%);
+        }
+
+        .location-info h2 {
+            font-size: 40px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .info-icon {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .info-content h4 {
+            font-family: var(--font-label);
+            font-size: 14px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .info-content p {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .btn-directions {
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        /* Inquiry form */
+        .inquiry-form {
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px 18px;
+        }
+
+        .inquiry-form .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .inquiry-form .field-full {
+            grid-column: 1 / -1;
+        }
+
+        .field-label {
+            font-family: var(--font-label);
+            font-size: 11px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .field-input,
+        .field-textarea {
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 106, 0, 0.5);
+            background: rgba(10, 10, 10, 0.9);
+            padding: 9px 12px;
+            font-size: 13px;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s ease-out,
+                        box-shadow 0.2s ease-out,
+                        transform 0.2s ease-out;
+        }
+
+        .field-textarea {
+            border-radius: 14px;
+            min-height: 70px;
+            resize: vertical;
+        }
+
+        .field-input::placeholder,
+        .field-textarea::placeholder {
+            color: rgba(200, 200, 200, 0.45);
+        }
+
+        .field-input:focus,
+        .field-textarea:focus {
+            border-color: rgba(255, 140, 0, 0.95);
+            box-shadow: 0 0 16px rgba(255, 106, 0, 0.5);
+            transform: translateY(-1px) translateZ(0);
+        }
+
+        .inquiry-status {
+            margin-top: 4px;
+            font-size: 12px;
+        }
+
+        .inquiry-status--success {
+            color: #8fffba;
+        }
+
+        .inquiry-status--error {
+            color: #ff9f9f;
+        }
+
+        /* 9. Pricing Section */
+        #pricing {
+            background: var(--bg);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            align-items: center;
+        }
+
+        .price-card {
+            background: var(--surface);
+            padding: 60px 40px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .price-card.featured {
+            background: var(--surface-light);
+            border: 1px solid var(--primary);
+            padding: 80px 40px;
+            animation: orangePulse 3s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--primary);
+            color: var(--bg);
+            padding: 6px 20px;
+            font-family: var(--font-label);
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        .plan-name {
+            font-size: 24px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .plan-price {
+            font-family: var(--font-heading);
+            font-size: 60px;
+            color: var(--text);
+            margin-bottom: 40px;
+        }
+
+        .plan-price span {
+            font-size: 20px;
+            color: var(--text-muted);
+        }
+
+        .features-list {
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .features-list li {
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features-list li span {
+            color: var(--primary);
+        }
+
+        .btn-pricing {
+            width: 100%;
+        }
+
+        /* 10. CTA Banner */
+        #cta-banner {
+            background: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.9)), 
+                        radial-gradient(circle, rgba(255, 106, 0, 0.2) 0%, transparent 70%);
+            padding: 120px 0;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: clamp(50px, 8vw, 100px);
+            margin-bottom: 40px;
+        }
+
+        .cta-btns {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        /* 11. Footer */
+        footer {
+            background: #0D0D0D;
+            border-top: 1px solid var(--primary);
+            padding: 80px 0 30px;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr 1fr;
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo .logo-brand {
+            font-size: 32px;
+        }
+
+        .footer-desc {
+            margin-top: 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+            max-width: 300px;
+        }
+
+        .footer-nav {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .footer-nav a {
+            font-family: var(--font-label);
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-nav a:hover {
+            color: var(--primary);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-end;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border: 1px solid rgba(255, 106, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background: var(--primary);
+            color: var(--bg);
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .footer-tagline {
+            color: var(--primary);
+            font-family: var(--font-label);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            nav { padding: 0 2rem; }
+            .hero-content { width: 80%; }
+            .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+            .trainers-grid { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+            .location-container { grid-template-columns: 1fr; }
+            .footer-top { grid-template-columns: 1fr; text-align: center; }
+            .footer-desc { margin: 20px auto; }
+            .footer-social { justify-content: center; }
+        }
+
+        @media (max-width: 768px) {
+            nav { height: 70px; padding: 0 1.5rem; }
+            nav .nav-links { display: none; }
+            #hero { padding-top: 100px; height: auto; padding-bottom: 100px; }
+            .hero-content { width: 100%; text-align: center; }
+            .hero-desc { margin: 0 auto 40px; }
+            .hero-btns { justify-content: center; }
+            .hero-title { font-size: 60px; }
+            .hero-stats { 
+                position: relative; 
+                right: 0; 
+                top: 0; 
+                transform: none; 
+                flex-direction: row; 
+                justify-content: center; 
+                flex-wrap: wrap;
+                gap: 30px;
+                margin-top: 60px; 
+                width: 100%; 
+            }
+            .stat-item { text-align: center; }
+            .stat-number { font-size: 45px; }
+            .benefits-grid { grid-template-columns: 1fr; }
+            .trainers-grid { grid-template-columns: 1fr; }
+            .cta-btns { flex-direction: column; align-items: center; }
+            .btn-primary, .btn-outline { width: 100%; max-width: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Navigation -->
+    <nav id="navbar">
+        <div class="logo-container">
+            <div class="logo-badge">MF</div>
+            <div class="logo-text">
+                <span class="logo-brand">MAX FITNESS GYMS</span>
+                <span class="logo-tagline">RANCHI'S ELITE GYM</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#programs">Programs</a></li>
+            <li><a href="#benefits">Benefits</a></li>
+            <li><a href="#trainers">Trainers</a></li>
+            <li><a href="#reviews">Reviews</a></li>
+            <li><a href="#location">Contact</a></li>
+        </ul>
+        <button class="nav-cta">JOIN NOW</button>
+    </nav>
+
+    <!-- 2. Hero Section -->
+    <section id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-badge">— ESTABLISHED 2016</span>
+                <h1 class="hero-title">FORGE YOUR <br><span class="orange-text">LEGEND</span></h1>
+                <h2 class="hero-subline outline-text">RANCHI'S ELITE TRAINING GROUND</h2>
+                <p class="hero-desc">Experience the pinnacle of fitness in Ranchi. We provide world-class equipment, expert guidance, and an electric atmosphere to help you crush your limits.</p>
+                <div class="hero-btns">
+                    <button class="btn-primary">START TRAINING</button>
+                    <button class="btn-outline">VIEW PROGRAMS</button>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="2000">0</div>
+                    <div class="stat-label">Members</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="15">0</div>
+                    <div class="stat-label">Expert Trainers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="8">0</div>
+                    <div class="stat-label">Years Strong</div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>SCROLL</span>
+            <div class="scroll-dot"></div>
+        </div>
+    </section>
+
+    <!-- 3. Ticker Bar -->
+    <div class="ticker-bar">
+        <div class="ticker-content">
+            <span class="ticker-text">cjscjs · POWER · DISCIPLINE · ENDURANCE · RESULTS · ELITE TRAINING · MAX FITNESS · </span>
+            <span class="ticker-text">STRENGTH · POWER · DISCIPLINE · ENDURANCE · RESULTS · ELITE TRAINING · MAX FITNESS · </span>
+            <span class="ticker-text">STRENGTH · POWER · DISCIPLINE · ENDURANCE · RESULTS · ELITE TRAINING · MAX FITNESS · </span>
+        </div>
+    </div>
+
+    <!-- 4. Benefits Section -->
+    <section id="benefits" class="section-padding">
+        <div class="container">
+            <span class="section-label">— WHY CHOOSE US —</span>
+            <div class="benefits-grid">
+                <div class="benefit-card anim-hidden" style="transition-delay: 0s">
+                    <span class="benefit-ghost">01</span>
+                    <span class="benefit-icon">💪</span>
+                    <h3 class="benefit-title">State-of-the-Art Equipment</h3>
+                    <p class="benefit-desc">Train with the latest machinery and free weights designed for professional athletes and beginners alike.</p>
+                </div>
+                <div class="benefit-card anim-hidden" style="transition-delay: 0.1s">
+                    <span class="benefit-ghost">02</span>
+                    <span class="benefit-icon">🏆</span>
+                    <h3 class="benefit-title">Expert Certified Trainers</h3>
+                    <p class="benefit-desc">Our trainers are internationally certified and dedicated to your personal transformation journey.</p>
+                </div>
+                <div class="benefit-card anim-hidden" style="transition-delay: 0.2s">
+                    <span class="benefit-ghost">03</span>
+                    <span class="benefit-icon">⏰</span>
+                    <h3 class="benefit-title">Flexible Timings 6AM–9PM</h3>
+                    <p class="benefit-desc">Work out on your schedule. We are open early and late to accommodate your busy lifestyle.</p>
+                </div>
+                <div class="benefit-card anim-hidden" style="transition-delay: 0.3s">
+                    <span class="benefit-ghost">04</span>
+                    <span class="benefit-icon">🚿</span>
+                    <h3 class="benefit-title">Separate Locker Rooms</h3>
+                    <p class="benefit-desc">Enjoy clean, spacious, and secure locker facilities with dedicated shower areas for men and women.</p>
+                </div>
+                <div class="benefit-card anim-hidden" style="transition-delay: 0.4s">
+                    <span class="benefit-ghost">05</span>
+                    <span class="benefit-icon">🥗</span>
+                    <h3 class="benefit-title">Diet & Nutrition Plans</h3>
+                    <p class="benefit-desc">Get customized meal plans from our experts to complement your hard work in the gym.</p>
+                </div>
+                <div class="benefit-card anim-hidden" style="transition-delay: 0.5s">
+                    <span class="benefit-ghost">06</span>
+                    <span class="benefit-icon">🔥</span>
+                    <h3 class="benefit-title">Energetic Community Vibe</h3>
+                    <p class="benefit-desc">Join a community of like-minded individuals who push each other to be better every single day.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Programs Carousel -->
+    <section id="programs" class="section-padding">
+        <div class="container">
+            <div class="carousel-header anim-hidden">
+                <div>
+                    <span class="section-label" style="text-align: left; margin-bottom: 10px;">— OUR PROGRAMS —</span>
+                    <h2 style="font-size: 50px;">ELITE TRAINING <span class="orange-text">CLASSES</span></h2>
+                </div>
+            </div>
+            <div class="carousel-wrapper">
+                <div class="carousel-controls carousel-controls-overlay" aria-label="Programs carousel controls">
+                    <button class="control-btn" id="prevBtn" aria-label="Previous programs">←</button>
+                    <button class="control-btn" id="nextBtn" aria-label="Next programs">→</button>
+                </div>
+                <div class="carousel-track" id="programTrack">
+                    <!-- Program Cards -->
+                    <div class="program-card active anim-hidden" style="transition-delay: 0s">
+                        <h3 class="program-name">Weight Training</h3>
+                        <p class="benefit-desc">Build raw power and muscle mass with our comprehensive strength programs.</p>
+                        <div class="program-meta">
+                            <span class="program-duration">60 MINS</span>
+                            <span class="program-badge">ALL LEVELS</span>
+                        </div>
+                    </div>
+                    <div class="program-card anim-hidden" style="transition-delay: 0.08s">
+                        <h3 class="program-name">Cardio Blast</h3>
+                        <p class="benefit-desc">High-intensity sessions designed to torch fat and improve cardiovascular health.</p>
+                        <div class="program-meta">
+                            <span class="program-duration">45 MINS</span>
+                            <span class="program-badge">INTENSE</span>
+                        </div>
+                    </div>
+                    <div class="program-card anim-hidden" style="transition-delay: 0.16s">
+                        <h3 class="program-name">Yoga & Flexibility</h3>
+                        <p class="benefit-desc">Find your balance and improve your range of motion with expert-led yoga.</p>
+                        <div class="program-meta">
+                            <span class="program-duration">60 MINS</span>
+                            <span class="program-badge">BEGINNER</span>
+                        </div>
+                    </div>
+                    <div class="program-card anim-hidden" style="transition-delay: 0.24s">
+                        <h3 class="program-name">CrossFit</h3>
+                        <p class="benefit-desc">Functional movements performed at high intensity for total body fitness.</p>
+                        <div class="program-meta">
+                            <span class="program-duration">50 MINS</span>
+                            <span class="program-badge">ADVANCED</span>
+                        </div>
+                    </div>
+                    <div class="program-card anim-hidden" style="transition-delay: 0.32s">
+                        <h3 class="program-name">Zumba Dance</h3>
+                        <p class="benefit-desc">Ditch the workout, join the party. A fun way to stay fit and active.</p>
+                        <div class="program-meta">
+                            <span class="program-duration">60 MINS</span>
+                            <span class="program-badge">ALL LEVELS</span>
+                        </div>
+                    </div>
+                    <div class="program-card anim-hidden" style="transition-delay: 0.40s">
+                        <h3 class="program-name">MMA & Boxing</h3>
+                        <p class="benefit-desc">Learn combat skills while getting in the best shape of your life.</p>
+                        <div class="program-meta">
+                            <span class="program-duration">75 MINS</span>
+                            <span class="program-badge">INTENSE</span>
+                        </div>
+                    </div>
+                    <div class="program-card anim-hidden" style="transition-delay: 0.48s">
+                        <h3 class="program-name">Personal Training</h3>
+                        <p class="benefit-desc">One-on-one sessions tailored specifically to your goals and needs.</p>
+                        <div class="program-meta">
+                            <span class="program-duration">CUSTOM</span>
+                            <span class="program-badge">ELITE</span>
+                        </div>
+                    </div>
+                    <div class="program-card anim-hidden" style="transition-delay: 0.56s">
+                        <h3 class="program-name">Body Transformation</h3>
+                        <p class="benefit-desc">A structured 12-week program for guaranteed results and lifestyle change.</p>
+                        <div class="program-meta">
+                            <span class="program-duration">12 WEEKS</span>
+                            <span class="program-badge">DEDICATED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Trainers Section -->
+    <section id="trainers" class="section-padding">
+        <div class="container">
+            <span class="section-label">— MEET THE ELITE —</span>
+            <h2 style="font-size: 50px; text-align: center; margin-bottom: 60px;">EXPERT <span class="orange-text">TRAINERS</span></h2>
+            <div class="trainers-grid">
+                <div class="trainer-card anim-hidden" style="transition-delay: 0s">
+                    <div class="trainer-accent"></div>
+                    <div class="trainer-avatar">
+                        <img src="https://picsum.photos/seed/trainer1/300/300" alt="Trainer 1" referrerPolicy="no-referrer">
+                    </div>
+                    <h3 class="trainer-name">Aman Sir</h3>
+                    <span class="trainer-specialty">Head Trainer / Bodybuilding</span>
+                    <p class="trainer-exp">10+ Years Experience</p>
+                    <div class="trainer-social"><a href="#">IG</a></div>
+                </div>
+                <div class="trainer-card anim-hidden" style="transition-delay: 0.1s">
+                    <div class="trainer-accent"></div>
+                    <div class="trainer-avatar">
+                        <img src="https://picsum.photos/seed/trainer2/300/300" alt="Trainer 2" referrerPolicy="no-referrer">
+                    </div>
+                    <h3 class="trainer-name">Vikram Singh</h3>
+                    <span class="trainer-specialty">CrossFit / MMA Expert</span>
+                    <p class="trainer-exp">7+ Years Experience</p>
+                    <div class="trainer-social"><a href="#">IG</a></div>
+                </div>
+                <div class="trainer-card anim-hidden" style="transition-delay: 0.2s">
+                    <div class="trainer-accent"></div>
+                    <div class="trainer-avatar">
+                        <img src="https://picsum.photos/seed/trainer3/300/300" alt="Trainer 3" referrerPolicy="no-referrer">
+                    </div>
+                    <h3 class="trainer-name">Priya Tigga</h3>
+                    <span class="trainer-specialty">Female Fitness / Yoga</span>
+                    <p class="trainer-exp">5+ Years Experience</p>
+                    <div class="trainer-social"><a href="#">IG</a></div>
+                </div>
+                <div class="trainer-card anim-hidden" style="transition-delay: 0.3s">
+                    <div class="trainer-accent"></div>
+                    <div class="trainer-avatar">
+                        <img src="https://picsum.photos/seed/trainer4/300/300" alt="Trainer 4" referrerPolicy="no-referrer">
+                    </div>
+                    <h3 class="trainer-name">Rahul M.</h3>
+                    <span class="trainer-specialty">Nutrition / Transformation</span>
+                    <p class="trainer-exp">8+ Years Experience</p>
+                    <div class="trainer-social"><a href="#">IG</a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Google Reviews Section -->
+    <section id="reviews" class="section-padding">
+        <div class="container">
+            <div class="reviews-header anim-hidden">
+                <div class="rating-badge">⭐ 4.6 / 5 — 118 Google Reviews</div>
+                <h2 style="font-size: 50px;">WHAT OUR <span class="orange-text">MEMBERS SAY</span></h2>
+            </div>
+            <div class="reviews-carousel anim-hidden">
+                <div class="reviews-track" id="reviewsTrack">
+                    <div class="review-card">
+                        <p class="review-text">"Maxx Fitness Gym is a really great place to work out. The trainers here are very experienced, and their behavior is extremely kind and supportive. Both male and female trainers are very good, helpful, and always ready to guide you properly."</p>
+                        <h4 class="review-author">Ankita Verma</h4>
+                        <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <div class="review-card">
+                        <p class="review-text">"I’ve been working out here for about a year now and it’s honestly been a great experience. The vibe of the place is really positive, the crowd is nice, and the equipment is top quality. It’s also quite spacious."</p>
+                        <h4 class="review-author">Yohan</h4>
+                        <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <div class="review-card">
+                        <p class="review-text">"Excellent gym affordable spacious well maintained and Experienced and well behaved trainers only gym in the area with female trainer."</p>
+                        <h4 class="review-author">Amrit Purti</h4>
+                        <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                    </div>
+                </div>
+                <div class="review-dots" id="reviewDots">
+                    <div class="dot active" data-index="0"></div>
+                    <div class="dot" data-index="1"></div>
+                    <div class="dot" data-index="2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Google Maps Embed Section -->
+    <section id="location" class="section-padding">
+        <div class="container">
+            <div class="location-container anim-hidden">
+                <div class="map-wrapper">
+                    <iframe 
+                        src="https://maps.google.com/maps?q=23.324976,85.3720374&z=15&output=embed"
+                        width="100%" height="100%" style="border:0;" allowfullscreen 
+                        loading="lazy">
+                    </iframe>
+                </div>
+                <div class="location-info">
+                    <span class="section-label" style="text-align: left; margin-bottom: 10px;">— VISIT US —</span>
+                    <h2>FIND US IN <span class="orange-text">RANCHI</span></h2>
+                    <div class="info-item">
+                        <div class="info-icon">📍</div>
+                        <div class="info-content">
+                            <h4>ADDRESS</h4>
+                            <p>Sadabahar Chowk, Namkum, Ranchi, Jharkhand 834010</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📞</div>
+                        <div class="info-content">
+                            <h4>PHONE</h4>
+                            <p>+91 77798 89011</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">⏰</div>
+                        <div class="info-content">
+                            <h4>HOURS</h4>
+                            <p>Mon–Sat: 6:00 AM – 9:00 PM <br> Sunday: Closed</p>
+                        </div>
+                    </div>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=23.324976,85.3720374" target="_blank" class="btn-primary btn-directions">GET DIRECTIONS</a>
+                    <!-- Lead Capture Form -->
+                    <form id="inquiry-form" class="inquiry-form">
+                        <!-- Replace this access_key with your real Web3Forms key -->
+                        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY" />
+                        <div class="field">
+                            <label class="field-label" for="inq-name">Full Name</label>
+                            <input class="field-input" id="inq-name" type="text" name="name" placeholder="Your name" required />
+                        </div>
+                        <div class="field">
+                            <label class="field-label" for="inq-phone">Phone</label>
+                            <input class="field-input" id="inq-phone" type="tel" name="phone" placeholder="+91…" required />
+                        </div>
+                        <div class="field">
+                            <label class="field-label" for="inq-email">Email</label>
+                            <input class="field-input" id="inq-email" type="email" name="email" placeholder="you@example.com" required />
+                        </div>
+                        <div class="field">
+                            <label class="field-label" for="inq-goal">Goal</label>
+                            <input class="field-input" id="inq-goal" type="text" name="goal" placeholder="Fat loss, muscle gain, general fitness…" />
+                        </div>
+                        <div class="field field-full">
+                            <label class="field-label" for="inq-message">Message</label>
+                            <textarea class="field-textarea" id="inq-message" name="message" rows="3" placeholder="Tell us about your current fitness level and goals"></textarea>
+                        </div>
+                        <div class="field field-full">
+                            <button class="btn-primary" type="submit">SUBMIT INQUIRY</button>
+                            <div id="inquiry-status" class="inquiry-status"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Membership Pricing Section -->
+    <section id="pricing" class="section-padding">
+        <div class="container">
+            <span class="section-label">— PRICING PLANS —</span>
+            <h2 style="font-size: 50px; text-align: center; margin-bottom: 60px;">CHOOSE YOUR <span class="orange-text">PLAN</span></h2>
+            <div class="pricing-grid">
+                <div class="price-card anim-hidden" style="transition-delay: 0s">
+                    <h3 class="plan-name">Basic</h3>
+                    <div class="plan-price">₹999<span>/mo</span></div>
+                    <ul class="features-list">
+                        <li><span>✓</span> Access to Gym Floor</li>
+                        <li><span>✓</span> Standard Equipment</li>
+                        <li><span>✓</span> Locker Access</li>
+                        <li><span>✓</span> 6AM - 9PM Access</li>
+                    </ul>
+                    <button class="btn-outline btn-pricing">SELECT PLAN</button>
+                </div>
+                <div class="price-card featured anim-hidden" style="transition-delay: 0.15s">
+                    <div class="popular-badge">MOST POPULAR</div>
+                    <h3 class="plan-name">Elite</h3>
+                    <div class="plan-price">₹1,799<span>/mo</span></div>
+                    <ul class="features-list">
+                        <li><span>✓</span> All Basic Features</li>
+                        <li><span>✓</span> Group Classes Access</li>
+                        <li><span>✓</span> Personalized Diet Plan</li>
+                        <li><span>✓</span> 2 PT Sessions / Month</li>
+                    </ul>
+                    <button class="btn-primary btn-pricing">SELECT PLAN</button>
+                </div>
+                <div class="price-card anim-hidden" style="transition-delay: 0.3s">
+                    <h3 class="plan-name">Pro</h3>
+                    <div class="plan-price">₹2,499<span>/mo</span></div>
+                    <ul class="features-list">
+                        <li><span>✓</span> All Elite Features</li>
+                        <li><span>✓</span> Unlimited PT Sessions</li>
+                        <li><span>✓</span> MMA & Boxing Classes</li>
+                        <li><span>✓</span> Supplement Guidance</li>
+                    </ul>
+                    <button class="btn-outline btn-pricing">SELECT PLAN</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. Call To Action Banner -->
+    <section id="cta-banner">
+        <div class="container anim-hidden">
+            <h2 class="cta-title">READY TO <span class="orange-text">TRANSFORM?</span></h2>
+            <p class="hero-desc" style="margin: 0 auto 40px;">Join Ranchi's most elite fitness community today and start your journey towards greatness.</p>
+            <div class="cta-btns">
+                <button class="btn-primary">START FREE TRIAL</button>
+                <button class="btn-outline">CALL US NOW</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-logo">
+                    <div class="logo-container">
+                        <div class="logo-badge">MF</div>
+                        <div class="logo-text">
+                            <span class="logo-brand">MAX FITNESS GYMS</span>
+                            <span class="logo-tagline">RANCHI'S ELITE GYM</span>
+                        </div>
+                    </div>
+                    <p class="footer-desc">The ultimate destination for fitness enthusiasts in Ranchi. Forge your legend with us.</p>
+                </div>
+                <div class="footer-nav">
+                    <a href="#hero">Home</a>
+                    <a href="#programs">Programs</a>
+                    <a href="#benefits">Benefits</a>
+                    <a href="#trainers">Trainers</a>
+                    <a href="#reviews">Reviews</a>
+                    <a href="#location">Contact</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-icon">FB</a>
+                    <a href="#" class="social-icon">IG</a>
+                    <a href="#" class="social-icon">TW</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MAX FITNESS GYMS. All rights reserved.</p>
+                <span class="footer-tagline">Built for Champions</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Navigation Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // 2. Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.12,
+            rootMargin: '0px 0px -60px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('anim-visible');
+                    // If it's the featured pricing card, add scale animation
+                    if (entry.target.classList.contains('featured')) {
+                        entry.target.style.transform = 'scale(1)';
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.anim-hidden').forEach(el => observer.observe(el));
+
+        // 3. Stat Counters
+        const stats = document.querySelectorAll('.stat-number');
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = parseInt(entry.target.getAttribute('data-target'));
+                    animateValue(entry.target, 0, target, 2000);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        stats.forEach(stat => statsObserver.observe(stat));
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                // Ease out quart
+                const easedProgress = 1 - Math.pow(1 - progress, 4);
+                const current = Math.floor(easedProgress * (end - start) + start);
+                obj.innerHTML = current + "+";
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // 4. Programs Carousel
+        const track = document.getElementById('programTrack');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        let scrollAmount = 0;
+        const cardWidth = 345; // card width + gap
+
+        function updateProgramControls() {
+            const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
+            if (scrollAmount <= 0) {
+                prevBtn.classList.add('is-hidden');
+            } else {
+                prevBtn.classList.remove('is-hidden');
+            }
+            if (scrollAmount >= maxScroll - 1) {
+                nextBtn.classList.add('is-hidden');
+            } else {
+                nextBtn.classList.remove('is-hidden');
+            }
+        }
+
+        function goNextProgram() {
+            const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
+            if (scrollAmount < maxScroll - 1) {
+                scrollAmount = Math.min(maxScroll, scrollAmount + cardWidth);
+            } else {
+                // loop back to start for auto-scroll
+                scrollAmount = 0;
+            }
+            track.style.transform = `translateX(-${scrollAmount}px)`;
+            updateProgramControls();
+        }
+
+        function goPrevProgram() {
+            scrollAmount = Math.max(0, scrollAmount - cardWidth);
+            track.style.transform = `translateX(-${scrollAmount}px)`;
+            updateProgramControls();
+        }
+
+        nextBtn.addEventListener('click', () => {
+            goNextProgram();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            goPrevProgram();
+        });
+
+        // Keep buttons in sync on load + resize
+        updateProgramControls();
+        window.addEventListener('resize', () => {
+            const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
+            scrollAmount = Math.min(scrollAmount, Math.max(0, maxScroll));
+            track.style.transform = `translateX(-${scrollAmount}px)`;
+            updateProgramControls();
+        }, { passive: true });
+
+        // Auto-scroll programs (keeps feature on)
+        let programsAutoTimer = setInterval(goNextProgram, 4500);
+        const programsWrapper = track.parentElement;
+        programsWrapper.addEventListener('mouseenter', () => {
+            clearInterval(programsAutoTimer);
+        });
+        programsWrapper.addEventListener('mouseleave', () => {
+            programsAutoTimer = setInterval(goNextProgram, 4500);
+        });
+
+        // 5. Reviews Carousel
+        const reviewsTrack = document.getElementById('reviewsTrack');
+        const dots = document.querySelectorAll('.dot');
+        let currentReview = 0;
+
+        function showReview(index) {
+            reviewsTrack.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+            currentReview = index;
+        }
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                showReview(parseInt(dot.getAttribute('data-index')));
+            });
+        });
+
+        // Auto rotate reviews
+        setInterval(() => {
+            currentReview = (currentReview + 1) % dots.length;
+            showReview(currentReview);
+        }, 5000);
+
+        // 6. Inquiry form submission (Web3Forms)
+        const inquiryForm = document.getElementById('inquiry-form');
+        const inquiryStatus = document.getElementById('inquiry-status');
+
+        if (inquiryForm && inquiryStatus) {
+            inquiryForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                inquiryStatus.textContent = 'Sending...';
+                inquiryStatus.className = 'inquiry-status';
+
+                const formData = new FormData(inquiryForm);
+                try {
+                    const res = await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        inquiryStatus.textContent = 'Got it! Our team will contact you shortly.';
+                        inquiryStatus.classList.add('inquiry-status--success');
+                        inquiryForm.reset();
+                    } else {
+                        inquiryStatus.textContent = 'Something went wrong. Please try again in a minute.';
+                        inquiryStatus.classList.add('inquiry-status--error');
+                    }
+                } catch (err) {
+                    inquiryStatus.textContent = 'Network error. Please check your connection and try again.';
+                    inquiryStatus.classList.add('inquiry-status--error');
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
