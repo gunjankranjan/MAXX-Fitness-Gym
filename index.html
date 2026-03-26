@@ -536,11 +536,12 @@
         }
 
         .carousel-wrapper {
+            scroll-behavior: smooth;
             position: relative;
             overflow: hidden;
             contain: layout;
             /* Reserve space so arrows don't overlap cards */
-            padding: 0 72px;
+            padding: 0 40px;
         }
 
         /* Overlay carousel controls (left/right edges) */
@@ -573,11 +574,16 @@
         }
 
         @media (max-width: 768px) {
+            .program-card {
+                flex: 0 0 100%;
+                max-width: 100%;
+                padding: 30px 20px;
+            }
             .carousel-controls.carousel-controls-overlay {
                 padding: 0 12px;
             }
             .carousel-wrapper {
-                padding: 0 56px;
+                padding: 0 10px;
             }
         }
 
@@ -585,10 +591,12 @@
             display: flex;
             gap: 25px;
             transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform ;
         }
 
         .program-card {
-            min-width: 320px;
+            flex: 0 0 50%; /* 2 cards on desktop */
+            max-width: 50%;
             background: linear-gradient(135deg, var(--surface) 0%, #0a0a0a 100%);
             padding: 40px;
             border-top: 2px solid var(--primary);
@@ -1672,39 +1680,68 @@
         const track = document.getElementById('programTrack');
         const nextBtn = document.getElementById('nextBtn');
         const prevBtn = document.getElementById('prevBtn');
-        let scrollAmount = 0;
-        const cardWidth = 345; // card width + gap
+        let currentIndex = 0;
+
+        const totalCards = document.querySelectorAll('.program-card').length;
+
+        function getVisibleCards() {
+             return window.innerWidth <= 768 ? 1 : 2;
+}
+
+
+        function getCardWidth() {
+            const card = document.querySelector('.program-card');
+            const style = window.getComputedStyle(card);
+            const gap = parseInt(style.marginRight) || 25;
+            return card.offsetWidth + gap;
+}
 
         function updateProgramControls() {
-            const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
-            if (scrollAmount <= 0) {
+            const visibleCards = getVisibleCards();
+            const maxIndex = totalCards - visibleCards;
+
+            if (currentIndex === 0) {
                 prevBtn.classList.add('is-hidden');
             } else {
                 prevBtn.classList.remove('is-hidden');
             }
-            if (scrollAmount >= maxScroll - 1) {
+
+            if (currentIndex >= maxIndex) {
                 nextBtn.classList.add('is-hidden');
             } else {
                 nextBtn.classList.remove('is-hidden');
             }
         }
 
-        function goNextProgram() {
-            const maxScroll = track.scrollWidth - track.parentElement.clientWidth;
-            if (scrollAmount < maxScroll - 1) {
-                scrollAmount = Math.min(maxScroll, scrollAmount + cardWidth);
-            } else {
-                // loop back to start for auto-scroll
-                scrollAmount = 0;
-            }
-            track.style.transform = `translateX(-${scrollAmount}px)`;
+        function updateCarousel() {
+            const card = document.querySelector('.program-card');
+            const cardWidth = card.offsetWidth + 25;
+
+            track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
             updateProgramControls();
         }
 
+        function goNextProgram() {
+            const visibleCards = getVisibleCards();
+            const maxIndex = totalCards - visibleCards;
+
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+            } else {
+                currentIndex = 0; // loop
+            }
+
+            updateCarousel();
+        }
+
         function goPrevProgram() {
-            scrollAmount = Math.max(0, scrollAmount - cardWidth);
-            track.style.transform = `translateX(-${scrollAmount}px)`;
-            updateProgramControls();
+            if (currentIndex > 0) {
+                currentIndex--;
+            } else {
+                currentIndex = 0;
+            }
+
+            updateCarousel();
         }
 
         nextBtn.addEventListener('click', () => {
