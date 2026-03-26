@@ -177,19 +177,21 @@
         }
 
         .logo-badge {
-            width: 45px;
-            height: 45px;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-heading);
-            font-size: 24px;
-            color: var(--bg);
-            border-radius: 4px;
-            animation: orangePulse 3s ease-in-out infinite;
-        }
+    width: 50px;
+    height: 50px;
+    background: transparent; /* remove orange box if not needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    overflow: hidden;
+}
 
+.logo-badge img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
         .logo-text {
             display: flex;
             flex-direction: column;
@@ -1155,7 +1157,9 @@
     <!-- 1. Navigation -->
     <nav id="navbar">
         <div class="logo-container">
-            <div class="logo-badge">MF</div>
+            <div class="logo-badge">
+                <img src="imh.png" alt="Gym Logo">
+            </div>
             <div class="logo-text">
                 <span class="logo-brand">MAX FITNESS GYMS</span>
                 <span class="logo-tagline">RANCHI'S ELITE GYM</span>
@@ -1209,7 +1213,7 @@
     <!-- 3. Ticker Bar -->
     <div class="ticker-bar">
         <div class="ticker-content">
-            <span class="ticker-text">cjscjs · POWER · DISCIPLINE · ENDURANCE · RESULTS · ELITE TRAINING · MAX FITNESS · </span>
+            <span class="ticker-text">STRENGTH · POWER · DISCIPLINE · ENDURANCE · RESULTS · ELITE TRAINING · MAX FITNESS · </span>
             <span class="ticker-text">STRENGTH · POWER · DISCIPLINE · ENDURANCE · RESULTS · ELITE TRAINING · MAX FITNESS · </span>
             <span class="ticker-text">STRENGTH · POWER · DISCIPLINE · ENDURANCE · RESULTS · ELITE TRAINING · MAX FITNESS · </span>
         </div>
