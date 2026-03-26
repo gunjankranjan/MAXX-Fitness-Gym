@@ -123,7 +123,7 @@
 
         @keyframes scrollIndicator {
             0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(10px); opacity: 0; }
+            100% { transform: translateY(1vh); opacity: 0; }
         }
 
         /* Layout Helpers */
@@ -177,21 +177,21 @@
         }
 
         .logo-badge {
-    width: 50px;
-    height: 50px;
-    background: transparent; /* remove orange box if not needed */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    overflow: hidden;
-}
+            height: 50px;
+            background: transparent; /* remove orange box if not needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            overflow: hidden;
+            width: 50px;
+        }
 
-.logo-badge img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+        .logo-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
         .logo-text {
             display: flex;
             flex-direction: column;
@@ -368,8 +368,8 @@
         }
 
         .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
+            position: fixed;
+            bottom: clamp(20px, 5vw, 60px);
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -380,11 +380,14 @@
             font-family: var(--font-label);
             font-size: 10px;
             letter-spacing: 2px;
+            pointer-events: none;
+            z-index: 5;
+            transition: opacity 0.4s ease;
         }
 
         .scroll-dot {
             width: 2px;
-            height: 15px;
+            height: clamp(12px,2vh,20px);
             background: var(--primary);
             animation: scrollIndicator 1.5s infinite;
         }
@@ -1084,13 +1087,14 @@
             align-items: center;
             justify-content: center;
             color: var(--primary);
-            transition: all 0.3s ease;
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),background 0.3s ease,box-shadow 0.3s ease;
+            will-change: transform;
         }
 
         .social-icon:hover {
-            background: var(--primary);
-            color: var(--bg);
-            transform: translateY(-5px);
+            background: var(--secondary);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 106, 0, 0.4);
         }
 
         .footer-bottom {
@@ -1158,7 +1162,7 @@
     <nav id="navbar">
         <div class="logo-container">
             <div class="logo-badge">
-                <img src="imh.png" alt="Gym Logo">
+                <img src="images/logo.png" alt="Gym Logo">
             </div>
             <div class="logo-text">
                 <span class="logo-brand">MAX FITNESS GYMS</span>
@@ -1565,7 +1569,9 @@
             <div class="footer-top">
                 <div class="footer-logo">
                     <div class="logo-container">
-                        <div class="logo-badge">MF</div>
+                        <div class="logo-badge">
+                            <img src="images/logo.png" alt="Gym Logo">
+                        </div>
                         <div class="logo-text">
                             <span class="logo-brand">MAX FITNESS GYMS</span>
                             <span class="logo-tagline">RANCHI'S ELITE GYM</span>
@@ -1582,9 +1588,15 @@
                     <a href="#location">Contact</a>
                 </div>
                 <div class="footer-social">
-                    <a href="#" class="social-icon">FB</a>
-                    <a href="#" class="social-icon">IG</a>
-                    <a href="#" class="social-icon">TW</a>
+                    <a href="#" class="social-icon">
+                        <img class="social-icon" src="images/FB_logo.png" alt="Facebook">
+                    </a>
+                    <a href="https://www.instagram.com/maxx_fitness_gym_01/?hl=en" class="social-icon">
+                        <img class="social-icon" src="images/IG_logo.png" alt="Instagram">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img class="social-icon" src="images/TW_logo.png" alt="Twitter">
+                    </a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -1777,6 +1789,17 @@
                 }
             });
         }
+
+        // 7. Scroll Indicator Hide on Scroll
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                scrollIndicator.style.opacity = '0';
+            } else {
+                scrollIndicator.style.opacity = '1';
+            }
+        });
 
     </script>
 </body>
